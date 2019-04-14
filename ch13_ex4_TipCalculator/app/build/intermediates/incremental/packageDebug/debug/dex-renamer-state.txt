@@ -1,0 +1,4 @@
+#Sun Apr 14 15:56:46 BDT 2019
+base.0=/home/jake/Desktop/Android Project for Shammo/Exercise-13.4/ch13_ex4_TipCalculator/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

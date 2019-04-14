@@ -1,0 +1,43 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/jake/Desktop/Android Project for Shammo/Exercise-13.4/ch13_ex4_TipCalculator/app/build/intermediates/res/merged/debug/values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/jake/Desktop/Android Project for Shammo/Exercise-13.4/ch13_ex4_TipCalculator/app/src/main/res/values/strings.xml",
+                    "from": {
+                        "startLines": "1,6,5,11,10,3,14,13,9,8,2,17,16",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "17,257,198,441,401,144,537,487,356,301,70,639,585",
+                        "endColumns": "51,40,57,38,38,50,44,48,43,53,72,46,52",
+                        "endOffsets": "64,293,251,475,435,190,577,531,395,350,138,681,633"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,107,140,198,237,276,327,372,421,465,519,592,639",
+                        "endColumns": "51,32,57,38,38,50,44,48,43,53,72,46,52",
+                        "endOffsets": "102,135,193,232,271,322,367,416,460,514,587,634,687"
+                    }
+                },
+                {
+                    "source": "/home/jake/Desktop/Android Project for Shammo/Exercise-13.4/ch13_ex4_TipCalculator/app/src/main/res/values/styles.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "19",
+                        "endColumns": "77",
+                        "endOffsets": "92"
+                    },
+                    "to": {
+                        "startLines": "15",
+                        "startColumns": "4",
+                        "startOffsets": "692",
+                        "endColumns": "76",
+                        "endOffsets": "764"
+                    }
+                }
+            ]
+        }
+    ]
+}

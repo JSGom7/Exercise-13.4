@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Fri Apr 12 22:24:24 BDT 2019
+0.baseType=DIRECTORY
+0.base=/home/jake/Desktop/Android Project for Shammo/Exercise-13.4/ch13_ex4_TipCalculator/app/build/intermediates/transforms/dexMerger/debug/0
+0.path=classes.dex
+0.set=DEX
+count=1

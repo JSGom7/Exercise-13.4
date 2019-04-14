@@ -1,9 +1,11 @@
 package com.murach.tipcalculator;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +26,7 @@ implements OnEditorActionListener, OnClickListener {
     private TextView percentTextView;   
     private Button   percentUpButton;
     private Button   percentDownButton;
+    private Button saveButton;
     private TextView tipTextView;
     private TextView totalTextView;
     
@@ -33,12 +36,18 @@ implements OnEditorActionListener, OnClickListener {
     
     // set up preferences
     private SharedPreferences prefs;
-    
+    private TipDatabase tipDatabase;
+
+    private long id;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tip_calculator);
-        
+
+        tipDatabase = new TipDatabase(this);
+
         // get references to the widgets
         billAmountEditText = (EditText) findViewById(R.id.billAmountEditText);
         percentTextView = (TextView) findViewById(R.id.percentTextView);
@@ -46,12 +55,14 @@ implements OnEditorActionListener, OnClickListener {
         percentDownButton = (Button) findViewById(R.id.percentDownButton);
         tipTextView = (TextView) findViewById(R.id.tipTextView);
         totalTextView = (TextView) findViewById(R.id.totalTextView);
+        saveButton = (Button) findViewById(R.id.button_save);
 
         // set the listeners
         billAmountEditText.setOnEditorActionListener(this);
         percentUpButton.setOnClickListener(this);
         percentDownButton.setOnClickListener(this);
-        
+        saveButton.setOnClickListener(this);
+
         // get default SharedPreferences object
         prefs = PreferenceManager.getDefaultSharedPreferences(this);        
     }
@@ -70,7 +81,7 @@ implements OnEditorActionListener, OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        
+
         // get the instance variables
         billAmountString = prefs.getString("billAmountString", "");
         tipPercent = prefs.getFloat("tipPercent", 0.15f);
@@ -80,6 +91,16 @@ implements OnEditorActionListener, OnClickListener {
         
         // calculate and display
         calculateAndDisplay();
+
+        //Displaying rows from tips_table
+        ArrayList<Tip> tips = tipDatabase.getTips();
+        for(Tip tip : tips){
+            Log.d("tip_table", "ID: " + Long.toString(tip.getId()) + " " +
+                    "Bill date: " + tip.getDateStringFormatted() + " " +
+                    "Bill amount: " + tip.getBillAmountFormatted() + " " +
+                    "Tip percent: " + tip.getTipPercentFormatted() + "\n");
+        }
+        id = tips.size();
     }
     
     public void calculateAndDisplay() {        
@@ -127,6 +148,16 @@ implements OnEditorActionListener, OnClickListener {
             tipPercent = tipPercent + .01f;
             calculateAndDisplay();
             break;
+        case R.id.button_save:
+            Tip tip = new Tip(id++, 0,
+                    Float.parseFloat(billAmountEditText.getText().toString()),
+                    tipPercent);
+            tipDatabase.insertTip(tip);
+            billAmountEditText.setText("");
+            tipPercent = 0;
+            calculateAndDisplay();
         }
     }
+
+
 }
