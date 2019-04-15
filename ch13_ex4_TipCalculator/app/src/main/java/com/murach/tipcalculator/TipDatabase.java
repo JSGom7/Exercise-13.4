@@ -1,5 +1,6 @@
 package com.murach.tipcalculator;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,14 +69,13 @@ public class TipDatabase {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TIP_TABLE);
 
-            db.execSQL("INSERT INTO tip VALUES (0, 42.6, .15)");
-            db.execSQL("INSERT INTO tip VALUES (0, 22.7, .1)");
+            db.execSQL("INSERT INTO tip VALUES (0, 0, 42.6, .15)");
+            db.execSQL("INSERT INTO tip VALUES (1, 0, 22.7, .1)");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int i, int i1) {
 
-            db.execSQL(DROP_TIP_TABLE);
             onCreate(db);
         }
     }
@@ -99,10 +99,30 @@ public class TipDatabase {
     public void insertTip(Tip tip){
         this.openWritableDB();
 
-        db.execSQL("INSERT INTO tip VALUES (" + tip.getId() +
-                ", 0" +
-                ", " + tip.getBillAmount() +
-                ", " + tip.getTipPercent() + ")");
+        ContentValues cv = new ContentValues();
+        cv.put(TIP_ID, tip.getId());
+        cv.put(TIP_BILL_DATE, tip.getDateMillis());
+        cv.put(TIP_BILL_AMOUNT, tip.getBillAmount());
+        cv.put(TIP_TIP_PERCENT, tip.getTipPercent());
+
+        long rowId = db.insert(TIP_TABLE, null, cv);
+        this.closeDB();
+    }
+
+    public String getLastSavedTip(){
+        this.openReadableDB();
+        Cursor cursor = db.rawQuery("SELECT MAX(bill_date) FROM tip", null);
+        cursor.moveToFirst();
+        Tip tip = new Tip();
+        tip.setDateMillis(cursor.getLong(0));
+        return tip.getDateStringFormatted();
+    }
+
+    public Float getAvgTipPercent(){
+        this.openReadableDB();
+        Cursor cursor = db.rawQuery("SELECT AVG(tip_percent) FROM tip", null);
+        cursor.moveToFirst();
+        return cursor.getFloat(0);
     }
 
     private static Tip getTipFromCursor(Cursor cursor) {
@@ -123,6 +143,14 @@ public class TipDatabase {
                 return null;
             }
         }
+    }
+
+    public void clearTable(){
+        this.openWritableDB();
+        db.execSQL("DELETE FROM tip");
+        db.execSQL("INSERT INTO tip VALUES (0, 0, 42.6, .15)");
+        db.execSQL("INSERT INTO tip VALUES (1, 0, 22.7, .1)");
+        this.closeDB();
     }
 }
 

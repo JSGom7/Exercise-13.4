@@ -2,6 +2,7 @@ package com.murach.tipcalculator;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -47,7 +48,6 @@ implements OnEditorActionListener, OnClickListener {
         setContentView(R.layout.activity_tip_calculator);
 
         tipDatabase = new TipDatabase(this);
-
         // get references to the widgets
         billAmountEditText = (EditText) findViewById(R.id.billAmountEditText);
         percentTextView = (TextView) findViewById(R.id.percentTextView);
@@ -101,6 +101,12 @@ implements OnEditorActionListener, OnClickListener {
                     "Tip percent: " + tip.getTipPercentFormatted() + "\n");
         }
         id = tips.size();
+
+        Log.d("tip_table", "Last Saved at: " + tipDatabase.getLastSavedTip());
+        Log.d("tip_table", "Average Tip Percent: " + tipDatabase.getAvgTipPercent());
+        tipPercent = tipDatabase.getAvgTipPercent();
+        calculateAndDisplay();
+
     }
     
     public void calculateAndDisplay() {        
@@ -138,6 +144,12 @@ implements OnEditorActionListener, OnClickListener {
     }
 
     @Override
+    protected void onDestroy() {
+        tipDatabase.clearTable();
+        super.onDestroy();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.percentDownButton:
@@ -149,7 +161,8 @@ implements OnEditorActionListener, OnClickListener {
             calculateAndDisplay();
             break;
         case R.id.button_save:
-            Tip tip = new Tip(id++, 0,
+            Date date = new Date();
+            Tip tip = new Tip(id++, date.getTime(),
                     Float.parseFloat(billAmountEditText.getText().toString()),
                     tipPercent);
             tipDatabase.insertTip(tip);
